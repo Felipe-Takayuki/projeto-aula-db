@@ -1,10 +1,6 @@
 import sqlite3
 from models.produto_model import Produto 
-
-
-def conectaBD():
-    conexao = sqlite3.connect("mercadinho.db") 
-    return conexao
+from services.database import conectaBD
 
 def incluirProduto(produto):
     conexao = conectaBD()

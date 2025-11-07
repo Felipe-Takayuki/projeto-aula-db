@@ -1,11 +1,6 @@
 import sqlite3
 from models.categoria_model import Categoria 
-
-
-def conectaBD():
-    conexao = sqlite3.connect("mercadinho.db") 
-    return conexao
-
+from services.database import conectaBD
 
 def incluirCategoria(categoria):
     conexao = conectaBD()
