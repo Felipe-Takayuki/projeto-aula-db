@@ -3,7 +3,7 @@ import pandas as pd
 import controllers.cliente_controller as ClienteController
 from models.pessoa_model import Pessoa
 
-@st.dialog("Confirmação")
+@st.dialog("Cadastro de cliente")
 def confirmar():
     with st.form(key="incluir_cliente", clear_on_submit=True):
 
