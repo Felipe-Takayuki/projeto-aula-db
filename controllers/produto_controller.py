@@ -71,7 +71,7 @@ def excluirProduto(id):
     cursor = conexao.cursor()
     
     try:
-        cursor.execute("DELETE FROM PRODUTO WHERE id = ?", (id,))
+        cursor.execute("DELETE FROM produto WHERE id = ?", (id,))
         conexao.commit()
         
         if cursor.rowcount > 0:
@@ -98,8 +98,8 @@ def alterarProduto(produto):
 
     try:
         cursor.execute("""
-            UPDATE PRODUTO 
-            SET NOME = ?, DESCRICAO = ?, Quantidade_Produto = ?, PRECO = ?, id_categoria = ?
+            UPDATE produto 
+            SET nome = ?, descricao = ?, quantidade_produto = ?, preco = ?, id_categoria = ?
             WHERE id = ?
         """, (
             produto.get_nome(),

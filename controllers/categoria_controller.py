@@ -7,7 +7,7 @@ def incluirCategoria(categoria):
     cursor = conexao.cursor()
     try:
         cursor.execute("""
-            INSERT INTO CATEGORIA (NOME)
+            INSERT INTO categoria (nome)
             VALUES (?)
         """, (
             categoria.get_nome(), 
@@ -34,7 +34,7 @@ def consultarCategorias():
     lista_de_categorias = [] 
     
     try:
-        cursor.execute('SELECT * FROM CATEGORIA ORDER BY NOME')
+        cursor.execute('SELECT * FROM categoria ORDER BY nome')
         rows = cursor.fetchall()
         
 
@@ -57,7 +57,7 @@ def excluirCategoria(id):
     cursor = conexao.cursor()
     
     try:
-        cursor.execute("DELETE FROM CATEGORIA WHERE id = ?", (id,))
+        cursor.execute("DELETE FROM categoria WHERE id = ?", (id,))
         conexao.commit()
         
         if cursor.rowcount > 0:
@@ -84,8 +84,8 @@ def alterarCategoria(categoria):
 
     try:
         cursor.execute("""
-            UPDATE CATEGORIA 
-            SET NOME = ?
+            UPDATE categoria 
+            SET nome = ?
             WHERE id = ?
         """, (
             categoria.get_nome(),

@@ -2,7 +2,7 @@ import streamlit as st
 import sys
 from pathlib import Path
 import importlib
-
+from services.database import initDB
 st.set_page_config(page_title="Mercadinho do Paul", layout="wide")
 
 sys.path.append(str(Path(__file__).parent))
@@ -10,7 +10,8 @@ sys.path.append(str(Path(__file__).parent))
 PAGES = {
     "Home": "views.home_view",          
     "Categorias": "views.categoria_view",
-    "Produtos": "views.produto_view"
+    "Produtos": "views.produto_view",
+    "Cliente": "views.cliente_view"
 }
 
 def load_page(page_name):
@@ -26,7 +27,7 @@ def load_page(page_name):
         return None
 
 def main():
-    
+    initDB()
     with st.sidebar:
         st.logo("assets/images/logo/logo.png", size='large')
         st.title("Menu Principal")

@@ -3,3 +3,12 @@ import sqlite3
 def conectaBD():
     conexao = sqlite3.connect("mercadinho.db")
     return conexao
+
+def initDB(): 
+    from services.categoria_service import initCategoriaTB
+    from services.cliente_service import initClienteTB
+    from services.produto_service import initProdutoTB
+    conexao = conectaBD()
+    initCategoriaTB(conexao=conexao)
+    initClienteTB(conexao=conexao)
+    initProdutoTB(conexao=conexao)
