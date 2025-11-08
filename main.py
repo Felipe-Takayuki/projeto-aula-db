@@ -27,7 +27,9 @@ def load_page(page_name):
         return None
 
 def main():
-    initDB()
+    if "db_initialized" not in st.session_state:
+        initDB()
+        st.session_state["db_initialized"] = True
     with st.sidebar:
         st.logo("assets/images/logo/logo.png", size='large')
         st.title("Menu Principal")
