@@ -17,7 +17,10 @@ def confirmar():
                     novo_cliente = Pessoa(id=None, nome=nome, cpf=cpf, telefone=telefone)
 
                     if ClienteController.incluirCliente(novo_cliente):
-                            st.success(f"Cliente '{nome}' incluída com sucesso!")
+                        st.session_state["reload_clientes"] = True   # <--- MARCA PARA RECARREGAR
+                        st.success(f"Cliente '{nome}' incluída com sucesso!")
+                        st.rerun()
+
                     else:
                             st.error("Erro ao incluir cliente. (Verifique se ele já existe)")
                 else:
@@ -26,16 +29,21 @@ def confirmar():
 
 
 def show_page():
-    
-    st.title("Clientes")
+    lista_clientes = ClienteController.consultarClientes()
 
+    if st.session_state.get("reload_clientes"):
+        lista_clientes = ClienteController.consultarClientes()
+        st.session_state["reload_clientes"] = False
+        
+    st.title("Clientes")
     if st.button("Adicionar novo cliente"):
         confirmar()
+        lista_clientes = ClienteController.consultarClientes()
 
     if "confirmado" in st.session_state:
         st.write("Resultado:", st.session_state["confirmado"])
     
-    lista_clientes = ClienteController.consultarClientes()
+    
         
     if not lista_clientes:
             st.info("Nenhum cliente cadastrado.")
