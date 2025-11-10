@@ -84,10 +84,10 @@ def alterarCliente(pessoa: Pessoa):
 
     try:
         cursor.execute("""
-            UPDATE cliente 
+            UPDATE cliente
             SET nome = ?,
-            SET cpf = ?,
-            SET telefone = ? 
+                cpf = ?,
+                telefone = ?
             WHERE id = ?
         """, (
             pessoa.get_nome(),
@@ -99,7 +99,7 @@ def alterarCliente(pessoa: Pessoa):
         conexao.commit()
         
         if cursor.rowcount > 0:
-            print(f"cliente com id {pessoa.get_id()} alterada com sucesso!")
+            print(f"Cliente com id {pessoa.get_id()} alterado com sucesso!")
             return True
         else:
             print(f"Nenhum cliente encontrado com o id {pessoa.get_id()}.")
