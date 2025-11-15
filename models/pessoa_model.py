@@ -1,4 +1,6 @@
-class Pessoa: 
+from abc import ABC, abstractmethod
+
+class Pessoa(ABC): 
     def __init__(self, id, nome, cpf, telefone):
         self._id = id
         self._nome = nome
@@ -25,10 +27,7 @@ class Pessoa:
     def set_telefone(self, telefone):
         self._telefone = telefone 
     
+    @abstractmethod
     def to_dict(self):
-        return {
-            "id": self._id,
-            "nome": self._nome,
-            "cpf": self._cpf,
-            "telefone": self._telefone
-        }
+        """Deve ser implementado pelas subclasses"""
+        pass
