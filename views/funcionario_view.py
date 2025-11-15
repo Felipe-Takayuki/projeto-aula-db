@@ -4,41 +4,29 @@ import controllers.funcionario_controller as FuncionarioController
 from models.funcionario_model import Funcionario
 import re
 
-def format_cpf(cpf: str) -> str:
-    cpf = re.sub(r"\D", "", cpf)
-    if len(cpf) >= 3:
-        cpf = cpf[:3] + "." + cpf[3:]
-    if len(cpf) >= 7:
-        cpf = cpf[:7] + "." + cpf[7:]
-    if len(cpf) >= 11:
-        cpf = cpf[:11] + "-" + cpf[11:]
-    return cpf[:14]
-
 
 @st.dialog("Cadastro de funcionário")
 def modal_cadastrar():
     with st.form(key="form_cadastro", clear_on_submit=True):
         nome = st.text_input("Nome do Funcionário:", placeholder="Ex: Paul")
 
-        cpf_raw = st.text_input(
+        cpf = st.text_input(
             "CPF do Funcionário",
-            placeholder="Ex: 444.444.444-20",
-            key="cpf_raw"
+            placeholder="Ex: 44444444420",
+            max_chars=11
         )
 
-        telefone = st.text_input("Telefone do Funcionário", placeholder="Ex: 14999999999")
+        telefone = st.text_input("Telefone do Funcionário", placeholder="Ex: 14999999999", max_chars=11)
         salario = st.number_input("Salário (R$):", min_value=0.0, format="%.2f")
 
         submit_button = st.form_submit_button("Incluir")
 
         if submit_button:
             if nome:
-                cpf_formatado = format_cpf(cpf_raw)
-
                 novo_funcionario = Funcionario(
                     id=None,
                     nome=nome,
-                    cpf=cpf_formatado,
+                    cpf=cpf,
                     telefone=telefone,
                     salario=salario
                 )
@@ -60,8 +48,23 @@ def modal_cadastrar():
 def modal_editar(funcionario: Funcionario):
     with st.form(key="form_editar", clear_on_submit=True):
         nome = st.text_input("Nome do Funcionário:", value=funcionario.get_nome())
-        cpf = st.text_input("CPF do Funcionário", value=funcionario.get_cpf())
-        telefone = st.text_input("Telefone do Funcionário", value=funcionario.get_telefone())
+        cpf_edit = funcionario.get_cpf()
+        telefone_edit = funcionario.get_telefone()
+        cpf_edit = re.sub(r"\D", "", cpf_edit)
+        telefone_edit = re.sub(r"\D", "", telefone_edit)
+        cpf = st.text_input(
+            "CPF do Funcionário",
+            placeholder="Ex: 44444444420",
+            max_chars=11,
+            value=cpf_edit
+        )
+
+        telefone = st.text_input(
+            "Telefone do Funcionário", 
+            placeholder="Ex: 14999999999", 
+            max_chars=11,
+            value=telefone_edit
+        )
         salario = st.number_input("Salário (R$):", min_value=0.0, format="%.2f", value=funcionario.get_salario())
 
         submit_button = st.form_submit_button("Salvar alterações")
