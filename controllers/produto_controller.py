@@ -12,7 +12,7 @@ def incluirProduto(produto):
             produto.get_nome(),
             produto.get_descricao(),
             produto.get_quantidade(),
-            produto.get_preco(),
+            float(produto.get_preco()),
             produto.get_id_categoria()
         )) 
         

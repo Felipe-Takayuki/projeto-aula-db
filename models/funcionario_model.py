@@ -6,12 +6,14 @@ class Funcionario(Pessoa):
         self._nome = nome
         self._cpf = cpf 
         self._telefone = telefone 
-        self._salario = salario
+        self._salario = float(salario)
     
     def get_salario(self): 
         return float(self._salario); 
 
     def set_salario(self, salario): 
+        if salario <= 0:
+            raise ValueError("Salário deve ser positivo")
         self._salario = float(salario) 
 
     def to_dict(self):

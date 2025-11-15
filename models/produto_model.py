@@ -5,7 +5,7 @@ class Produto:
         self._nome = nome
         self._descricao = descricao
         self._quantidade = quantidade
-        self._preco = preco
+        self._preco = float(preco)
         self._id_categoria = id_categoria
     
     def get_id(self):
@@ -21,7 +21,7 @@ class Produto:
         return self._quantidade
 
     def get_preco(self):
-        return self._preco
+        return float(self._preco)
         
     def get_id_categoria(self):
         return self._id_categoria
@@ -43,7 +43,7 @@ class Produto:
     def set_preco(self, preco):
         if preco <= 0:
             raise ValueError("Valor unitário deve ser positivo")
-        self._preco = preco
+        self._preco = float(preco)
         
     def set_id_categoria(self, id_categoria):
         self._id_categoria = id_categoria
