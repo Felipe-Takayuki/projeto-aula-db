@@ -1,7 +1,7 @@
 import sqlite3
 from models.cliente_model import Cliente
 from services.database import conectaBD
-
+from utils.formatter import format_cpf, format_celular
 def incluirCliente(cliente: Cliente):
     conexao = conectaBD()
     cursor = conexao.cursor()
@@ -39,7 +39,7 @@ def consultarClientes():
         
 
         for row in rows:
-            cliente = Cliente(id=row[0], nome=row[1], cpf=row[2], telefone=row[3])
+            cliente = Cliente(id=row[0], nome=row[1], cpf=format_cpf(row[2]), telefone=format_celular(row[3]))
             lista_de_clientes.append(cliente)
             
         return lista_de_clientes

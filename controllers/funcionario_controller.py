@@ -1,7 +1,7 @@
 import sqlite3
 from models.funcionario_model import Funcionario
 from services.database import conectaBD
-
+from utils.formatter import format_cpf, format_celular
 def incluirFuncionario(funcionario: Funcionario):
     conexao = conectaBD()
     cursor = conexao.cursor()
@@ -39,7 +39,7 @@ def consultarFuncionarios():
         
 
         for row in rows:
-            funcionario = Funcionario(id=row[0], nome=row[1], cpf=row[2], telefone=row[3], salario=row[4])
+            funcionario = Funcionario(id=row[0], nome=row[1], cpf=format_cpf(row[2]), telefone=format_celular(row[3]), salario=row[4])
             lista_de_funcionarios.append(funcionario)
             
         return lista_de_funcionarios
