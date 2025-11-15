@@ -6,8 +6,8 @@ def initClienteTB(conexao):
     CREATE TABLE IF NOT EXISTS cliente (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome VARCHAR(100) NOT NULL UNIQUE,
-        cpf VARCHAR(20) NOT NULL UNIQUE,
-        telefone VARCHAR(15) NOT NULL           
+        cpf VARCHAR(11) NOT NULL UNIQUE,
+        telefone VARCHAR(11) NOT NULL           
     );""")
 
     cursor.close()
