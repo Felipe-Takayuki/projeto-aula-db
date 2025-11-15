@@ -1,8 +1,8 @@
 import sqlite3
-from models.pessoa_model import Pessoa
+from models.cliente_model import Cliente
 from services.database import conectaBD
 
-def incluirCliente(pessoa: Pessoa):
+def incluirCliente(cliente: Cliente):
     conexao = conectaBD()
     cursor = conexao.cursor()
     try:
@@ -10,7 +10,7 @@ def incluirCliente(pessoa: Pessoa):
             INSERT INTO cliente (nome, cpf, telefone)
             VALUES (?, ?, ?)
         """, (
-            pessoa.get_nome(), pessoa.get_cpf(), pessoa.get_telefone()
+            cliente.get_nome(), cliente.get_cpf(), cliente.get_telefone()
         )) 
         
         conexao.commit()
@@ -19,7 +19,7 @@ def incluirCliente(pessoa: Pessoa):
         
     except sqlite3.Error as e:
         if "UNIQUE constraint failed" in str(e):
-            print(f"Erro ao inserir cliente: O nome '{pessoa.get_nome()}' já existe.")
+            print(f"Erro ao inserir cliente: O nome '{cliente.get_nome()}' já existe.")
         else:
             print(f"Erro ao inserir cliente: {e}")
         return False 
@@ -39,8 +39,8 @@ def consultarClientes():
         
 
         for row in rows:
-            pessoa = Pessoa(id=row[0], nome=row[1], cpf=row[2], telefone=row[3])
-            lista_de_clientes.append(pessoa)
+            cliente = Cliente(id=row[0], nome=row[1], cpf=row[2], telefone=row[3])
+            lista_de_clientes.append(cliente)
             
         return lista_de_clientes
     
@@ -69,7 +69,9 @@ def excluirCliente(id):
             
     except sqlite3.Error as e:
         if "FOREIGN KEY constraint failed" in str(e):
-             print(f"Erro: O cliente com ID {id} está em uma Venda e não pode ser excluído.")
+            cursor.execute("DELETE FROM compra WHERE id_cliente = ?", id)
+            cursor.execute("DELETE FROM cliente WHERE id = ?", (id,))
+
         else:
             print(f"Erro ao excluir o cliente: {e}")
         return False
@@ -78,7 +80,7 @@ def excluirCliente(id):
         if conexao:
             conexao.close()
 
-def alterarCliente(pessoa: Pessoa):
+def alterarCliente(cliente: Cliente):
     conexao = conectaBD()
     cursor = conexao.cursor()
 
@@ -90,24 +92,24 @@ def alterarCliente(pessoa: Pessoa):
                 telefone = ?
             WHERE id = ?
         """, (
-            pessoa.get_nome(),
-            pessoa.get_cpf(),
-            pessoa.get_telefone(),
-            pessoa.get_id()
+            cliente.get_nome(),
+            cliente.get_cpf(),
+            cliente.get_telefone(),
+            cliente.get_id()
         ))
         
         conexao.commit()
         
         if cursor.rowcount > 0:
-            print(f"Cliente com id {pessoa.get_id()} alterado com sucesso!")
+            print(f"Cliente com id {cliente.get_id()} alterado com sucesso!")
             return True
         else:
-            print(f"Nenhum cliente encontrado com o id {pessoa.get_id()}.")
+            print(f"Nenhum cliente encontrado com o id {cliente.get_id()}.")
             return False
             
     except sqlite3.Error as e:
         if "UNIQUE constraint failed" in str(e):
-            print(f"Erro ao alterar cliente: O nome '{pessoa.get_nome()}' já existe.")
+            print(f"Erro ao alterar cliente: O nome '{cliente.get_nome()}' já existe.")
         else:
             print(f"Erro ao alterar cliente: {e}")
         return False

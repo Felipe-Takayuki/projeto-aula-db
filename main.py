@@ -11,7 +11,8 @@ PAGES = {
     "Home": "views.home_view",          
     "Categorias": "views.categoria_view",
     "Produtos": "views.produto_view",
-    "Cliente": "views.cliente_view"
+    "Cliente": "views.cliente_view",
+    "Funcionário": "views.funcionario_view"
 }
 
 def load_page(page_name):
