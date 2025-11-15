@@ -1,9 +1,8 @@
 import streamlit as st
 import pandas as pd
 import controllers.cliente_controller as ClienteController
-from models.pessoa_model import Pessoa
-
-
+from models.cliente_model import Cliente
+import re
 # ===============================
 # MODAL → CADASTRAR CLIENTE
 # ===============================
@@ -11,13 +10,13 @@ from models.pessoa_model import Pessoa
 def modal_cadastrar():
     with st.form(key="form_cadastro", clear_on_submit=True):
         nome = st.text_input("Nome do Cliente:", placeholder="Ex: Paul")
-        cpf = st.text_input("CPF do Cliente", placeholder="Ex: 444.444.444-20")
-        telefone = st.text_input("Telefone do Cliente", placeholder="Ex: 14999999999")
+        cpf = st.text_input("CPF do Cliente", placeholder="Ex: 444.444.444-20", max_chars=11)
+        telefone = st.text_input("Telefone do Cliente", placeholder="Ex: 14999999999", max_chars=11)
         submit_button = st.form_submit_button("Incluir")
 
         if submit_button:
             if nome:
-                novo_cliente = Pessoa(id=None, nome=nome, cpf=cpf, telefone=telefone)
+                novo_cliente = Cliente(id=None, nome=nome, cpf=cpf, telefone=telefone)
 
                 if ClienteController.incluirCliente(novo_cliente):
                     st.session_state.reload_clientes = True
@@ -33,11 +32,15 @@ def modal_cadastrar():
 # MODAL → EDITAR CLIENTE
 # ===============================
 @st.dialog("Editar Cliente")
-def modal_editar(cliente: Pessoa):
+def modal_editar(cliente: Cliente):
     with st.form(key="form_editar", clear_on_submit=True):
+        cpf_edit = cliente.get_cpf()
+        telefone_edit = cliente.get_telefone()
+        cpf_edit = re.sub(r"\D", "", cpf_edit)
+        telefone_edit = re.sub(r"\D", "", telefone_edit)
         nome = st.text_input("Nome do Cliente:", value=cliente.get_nome())
-        cpf = st.text_input("CPF do Cliente", value=cliente.get_cpf())
-        telefone = st.text_input("Telefone do Cliente", value=cliente.get_telefone())
+        cpf = st.text_input("CPF do Cliente", value=cpf_edit, max_chars=11)
+        telefone = st.text_input("Telefone do Cliente", value=telefone_edit, max_chars=11)
 
         submit_button = st.form_submit_button("Salvar alterações")
 
@@ -58,7 +61,7 @@ def modal_editar(cliente: Pessoa):
 # MODAL → CONFIRMAR EXCLUSÃO
 # ===============================
 @st.dialog("Excluir Cliente")
-def modal_excluir(cliente: Pessoa):
+def modal_excluir(cliente: Cliente):
     st.warning(f"Tem certeza que deseja excluir o cliente **{cliente.get_nome()}**?")
 
     if st.button("Sim, excluir", type="primary"):
@@ -153,10 +156,10 @@ def show_page():
             col3.write(row["cpf"])
             col4.write(row["telefone"])
 
-            if col5.button("✏", key=f"editar_{row['id']}"):
+            if col5.button("Editar", key=f"editar_{row['id']}"):
                 modal_editar(cliente)
 
-            if col6.button("🗑", key=f"del_{row['id']}"):
+            if col6.button("Excluir", key=f"del_{row['id']}"):
                 modal_excluir(cliente)
             st.divider()
 
