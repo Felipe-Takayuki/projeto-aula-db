@@ -1,4 +1,3 @@
-from services.database import conectaBD
 
 def initClienteTB(conexao):
     cursor = conexao.cursor()
