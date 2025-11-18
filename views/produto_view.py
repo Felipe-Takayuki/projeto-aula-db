@@ -4,6 +4,25 @@ import controllers.produto_controller as ProdutoController
 import controllers.categoria_controller as CategoriaController
 from models.produto_model import Produto
 
+@st.dialog("Cadastro de cliente")
+def modal_categoria():
+    with st.form(key="form_cadastro", clear_on_submit=True):
+        categoria = st.text_input("Nome da Categoria:", placeholder="Ex: Frios")
+        submit_button = st.form_submit_button("Incluir")
+
+        if submit_button:
+            if categoria:
+                novo_cliente = Categoria(id=None,nome=categoria)
+
+                if CategoriaController.incluirCategoria(novo_cliente):
+                    st.session_state.reload_clientes = True
+                    st.success(f"Categoria '{categoria}' incluída com sucesso!")
+                    st.rerun()
+                else:
+                    st.error("Erro ao incluir categoria.")
+            else:
+                st.warning("O nome do categoria é obrigatória.")
+
 def show_page():
     
     st.title("Cadastro de Produtos")
@@ -19,7 +38,8 @@ def show_page():
         
         if not lista_categorias:
             st.warning("É necessário cadastrar pelo menos uma Categoria antes de incluir um Produto.")
-            st.link_button("Cadastrar Categorias", "Categorias") # Botão para a página de Categoria
+            if st.button("Adicionar novo cliente"):
+                modal_categoria()
         else:
             map_cat = {cat.get_nome(): cat.get_id() for cat in lista_categorias}
             
