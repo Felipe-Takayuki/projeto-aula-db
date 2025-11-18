@@ -3,7 +3,6 @@ import pandas as pd
 import controllers.produto_controller as ProdutoController
 import controllers.categoria_controller as CategoriaController
 from models.produto_model import Produto
-from models.categoria_model import Categoria
 
 def show_page():
     

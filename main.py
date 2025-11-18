@@ -13,6 +13,7 @@ PAGES = {
     "Produtos": "views.produto_view",
     "Cliente": "views.cliente_view",
     "Funcionário": "views.funcionario_view"
+    ,"Fornecedores": "views.fornecedor_view"
 }
 
 def load_page(page_name):
