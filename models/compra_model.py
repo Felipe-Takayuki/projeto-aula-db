@@ -8,7 +8,7 @@ class Compra:
         self._id_produto = id_produto
         self._quantidade = quantidade
         self._valor_total = valor_total
-        self._data_venda = data_venda if data_venda else datetime.now()
+        self._data_compra = data_compra if data_compra else datetime.now()
 
     def get_id(self):
         return self._id
