@@ -1,29 +1,24 @@
 # services/tabela_fornecedor.py
 import sqlite3
 
-def criar_tabela_fornecedor():
+def initFornecedorTB(conexao):
     
     try:
-        conexao = sqlite3.connect("mercadinho.db")
         cursor = conexao.cursor()
     
         cursor.execute("""
-        CREATE TABLE IF NOT EXISTS FORNECEDOR (
+        CREATE TABLE IF NOT EXISTS fornecedor (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            NOME VARCHAR(100) NOT NULL,
-            CNPJ VARCHAR(18) NOT NULL UNIQUE,
-            TELEFONE VARCHAR(15)
+            nome VARCHAR(100) NOT NULL,
+            cnpj VARCHAR(14) NOT NULL UNIQUE,
+            telefone VARCHAR(11)
         );
         """)
         
         conexao.commit()
-        print("Tabela FORNECEDOR criada com sucesso!")
+        print("Tabela fornecedor criada com sucesso!")
         
     except sqlite3.Error as e:
-        print(f"Erro ao criar a tabela FORNECEDOR: {e}")
-    finally:
-        if conexao:
-            conexao.close()
+        print(f"Erro ao criar a tabela fornecedor: {e}")
 
-if __name__ == "__main__":
-    criar_tabela_fornecedor()
+

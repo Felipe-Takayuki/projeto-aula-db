@@ -1,16 +1,13 @@
 import sqlite3
 from models.fornecedor_model import Fornecedor
-
-def conectaBD():
-    conexao = sqlite3.connect("mercadinho.db")
-    return conexao
+from services.database import conectaBD
 
 def incluirFornecedor(fornecedor):
     conexao = conectaBD()
     cursor = conexao.cursor()
     try:
         cursor.execute("""
-            INSERT INTO FORNECEDOR (NOME, CNPJ, TELEFONE)
+            INSERT INTO fornecedor (nome, cnpj, telefone)
             VALUES (?, ?, ?)
         """, (
             fornecedor.get_nome(),
@@ -39,7 +36,7 @@ def consultarFornecedores():
     lista_fornecedores = []
     
     try:
-        cursor.execute('SELECT * FROM FORNECEDOR ORDER BY NOME')
+        cursor.execute('SELECT * FROM fornecedor ORDER BY nome')
         rows = cursor.fetchall()
         
         for row in rows:
@@ -61,8 +58,8 @@ def alterarFornecedor(fornecedor):
 
     try:
         cursor.execute("""
-            UPDATE FORNECEDOR 
-            SET NOME = ?, CNPJ = ?, TELEFONE = ?
+            UPDATE fornecedor 
+            SET nome = ?, cnpj = ?, telefone = ?
             WHERE id = ?
         """, (
             fornecedor.get_nome(),
@@ -93,7 +90,8 @@ def excluirFornecedor(id):
     cursor = conexao.cursor()
     
     try:
-        cursor.execute("DELETE FROM FORNECEDOR WHERE id = ?", (id,))
+        cursor.execute("DELETE FROM produto WHERE id_fornecedor = ?", (id,))
+        cursor.execute("DELETE FROM fornecedor WHERE id = ?", (id,))
         conexao.commit()
         
         if cursor.rowcount > 0:

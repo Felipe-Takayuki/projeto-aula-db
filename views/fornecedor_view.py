@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import controllers.fornecedor_controller as FornecedorController
 from models.fornecedor_model import Fornecedor
-
+from utils.formatter import format_cnpj, format_celular
 def show_page():
     st.title("Cadastro de Fornecedores")
 
@@ -15,8 +15,8 @@ def show_page():
         
         with st.form(key="incluir_fornecedor", clear_on_submit=True):
             nome = st.text_input("Nome do Fornecedor:", placeholder="Ex: Atacadão dos Doces")
-            cnpj = st.text_input("CNPJ:", placeholder="Ex: 00.000.000/0001-00")
-            telefone = st.text_input("Telefone:", placeholder="Ex: (11) 99999-9999")
+            cnpj = st.text_input("CNPJ:", placeholder="Ex: 00000000000100", max_chars=14)
+            telefone = st.text_input("Telefone:", placeholder="Ex: 11999999999", max_chars=11)
             
             submit_button = st.form_submit_button("Cadastrar")
             
@@ -44,8 +44,8 @@ def show_page():
                 dados.append({
                     "ID": f.get_id(),
                     "Nome": f.get_nome(),
-                    "CNPJ": f.get_cnpj(),
-                    "Telefone": f.get_telefone()
+                    "CNPJ": format_cnpj(f.get_cnpj()),
+                    "Telefone": format_celular(f.get_telefone())
                 })
             
             df = pd.DataFrame(dados).set_index("ID")
