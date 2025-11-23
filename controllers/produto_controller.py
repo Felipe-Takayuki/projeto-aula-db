@@ -61,7 +61,7 @@ def consultarProdutos():
                 "Quantidade": row[3],
                 "Preço (R$)": row[4],
                 "Categoria": row[5],
-                "Fornecedor": row[6],  # <-- AGORA VEM O NOME!
+                "Fornecedor": row[6],
                 "ID_Categoria": row[7],
                 "ID_Fornecedor": row[8]
             })
@@ -76,13 +76,12 @@ def consultarProdutos():
         conexao.close()
 
 def excluirProduto(id):
-
     conexao = conectaBD()
     cursor = conexao.cursor()
     
     try:
-        cursor.execute("DELETE FROM compra WHERE id_produto = ?", id)
-        cursor.execute("DELETE FROM produto WHERE id = ?", id)
+        cursor.execute("DELETE FROM compra WHERE id_produto = ?", (id,))
+        cursor.execute("DELETE FROM produto WHERE id = ?", (id,))
         conexao.commit()
         
         if cursor.rowcount > 0:
