@@ -10,7 +10,7 @@ import re
 def modal_cadastrar():
     with st.form(key="form_cadastro", clear_on_submit=True):
         nome = st.text_input("Nome do Cliente:", placeholder="Ex: Paul")
-        cpf = st.text_input("CPF do Cliente", placeholder="Ex: 444.444.444-20", max_chars=11)
+        cpf = st.text_input("CPF do Cliente", placeholder="Ex: 44444444420", max_chars=11)
         telefone = st.text_input("Telefone do Cliente", placeholder="Ex: 14999999999", max_chars=11)
         submit_button = st.form_submit_button("Incluir")
 
