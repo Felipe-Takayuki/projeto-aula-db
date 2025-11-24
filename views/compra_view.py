@@ -23,8 +23,8 @@ def show_page():
                 st.warning("Cadastre Clientes, Funcionários e Produtos antes de vender.")
             else:
 
-                map_cli = {f"{c.nome} (ID: {c.id})": c.id for c in clientes}
-                map_func = {f"{f.nome} (ID: {f.id})": f.id for f in funcionarios}
+                map_cli = {f"{c.get_nome()} (ID: {c.get_id()})": c.get_id() for c in clientes}
+                map_func = {f"{f.get_nome()} (ID: {f.get_id()})": f.get_id() for f in funcionarios}
                 map_prod = {f"{p['Nome']} (R$ {p['Preço (R$)']})": p['ID'] for p in produtos}
 
                 with st.form(key="form_compra"):

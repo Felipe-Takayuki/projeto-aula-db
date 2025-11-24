@@ -1,14 +1,13 @@
 import sqlite3
 from models.compra_model import Compra
+from services.database import conectaBD
 
-def conectaBD():
-    return sqlite3.connect("mercadinho.db")
 
-def incluirCompra(compra):
+def incluirCompra(compra: Compra):
     conexao = conectaBD()
     cursor = conexao.cursor()
     try:
-        cursor.execute("SELECT PRECO, Quantidade_Produto FROM PRODUTO WHERE id = ?", (compra.get_id_produto(),))
+        cursor.execute("SELECT preco, quantidade_produto FROM produto WHERE id = ?", (compra.get_id_produto(),))
         dados_produto = cursor.fetchone()
         
         if not dados_produto:
@@ -25,7 +24,7 @@ def incluirCompra(compra):
         valor_total = preco_unitario * qtd_comprada
 
         cursor.execute("""
-            INSERT INTO COMPRA (id_cliente, id_funcionario, id_produto, quantidade_produto, valor_total)
+            INSERT INTO compra (id_cliente, id_funcionario, id_produto, quantidade, valor_total)
             VALUES (?, ?, ?, ?, ?)
         """, (
             compra.get_id_cliente(),
@@ -36,7 +35,7 @@ def incluirCompra(compra):
         ))
 
         novo_estoque = estoque_atual - qtd_comprada
-        cursor.execute("UPDATE PRODUTO SET Quantidade_Produto = ? WHERE id = ?", (novo_estoque, compra.get_id_produto()))
+        cursor.execute("UPDATE produto SET quantidade_produto = ? WHERE id = ?", (novo_estoque, compra.get_id_produto()))
         
         conexao.commit()
         print("Compra registrada com sucesso!")
@@ -58,16 +57,16 @@ def consultarCompras():
         sql = """
         SELECT 
             Cp.id, 
-            Cl.NOME as Cliente, 
-            F.NOME as Funcionario, 
-            P.NOME as Produto, 
-            Cp.quantidade_produto, 
+            Cl.nome as cliente, 
+            F.nome as funcionario, 
+            P.nome as produto, 
+            Cp.quantidade, 
             Cp.valor_total,
             Cp.data_venda
-        FROM COMPRA Cp
-        JOIN CLIENTE Cl ON Cp.id_cliente = Cl.id
-        JOIN FUNCIONARIO F ON Cp.id_funcionario = F.id
-        JOIN PRODUTO P ON Cp.id_produto = P.id
+        FROM compra Cp
+        JOIN cliente Cl ON Cp.id_cliente = Cl.id
+        JOIN funcionario F ON Cp.id_funcionario = F.id
+        JOIN produto P ON Cp.id_produto = P.id
         ORDER BY Cp.id DESC
         """
         cursor.execute(sql)
@@ -96,7 +95,7 @@ def excluirCompra(id_compra):
     conexao = conectaBD()
     cursor = conexao.cursor()
     try:
-        cursor.execute("SELECT id_produto, quantidade_produto FROM COMPRA WHERE id = ?", (id_compra,))
+        cursor.execute("SELECT id_produto, quantidade FROM compra WHERE id = ?", (id_compra,))
         dados = cursor.fetchone()
         
         if not dados:
@@ -104,8 +103,8 @@ def excluirCompra(id_compra):
         id_produto = dados[0]
         qtd_comprada = dados[1]
 
-        cursor.execute("DELETE FROM COMPRA WHERE id = ?", (id_compra,))
-        cursor.execute("UPDATE PRODUTO SET Quantidade_Produto = Quantidade_Produto + ? WHERE id = ?", (qtd_comprada, id_produto))
+        cursor.execute("DELETE FROM compra WHERE id = ?", (id_compra,))
+        cursor.execute("UPDATE produto SET quantidade_produto = quantidade_produto + ? WHERE id = ?", (qtd_comprada, id_produto))
         conexao.commit()
         return True
     except sqlite3.Error as e:
